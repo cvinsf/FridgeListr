@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import FoodCard from './FoodCard.jsx';
-import SelectedFood from './SelectedFood';
+import FoodCard from './FoodCard.js';
+import SelectedFood from './SelectedFood.jsx';
 
 const MainInventory = (props) => {
 

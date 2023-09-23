@@ -4,8 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production nodemon ./server/server.js",
+    "start": "NODE_ENV=production node ./dist/index.js",
     "build": "NODE_ENV=production webpack",
     "build2": "NODE_ENV=development webpack",
     "dev": "concurrently \"cross-env NODE_ENV=development nodemon ./server/server.js\" \"cross-env NODE_ENV=development webpack serve --open\""
@@ -22,14 +21,14 @@
   },
   "homepage": "https://github.com/Yeti-Crab-52/scratch-project#readme",
   "dependencies": {
-    "bcrypt": "^5.0.1",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
+    "bcrypt": "^5.0.1",
     "express": "^4.18.1",
     "nodemon": "^2.0.19",
     "pg": "^8.7.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "sass": "^1.54.4"
@@ -54,6 +53,7 @@
     "react-router-dom": "^6.3.0",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
+    "typescript": "^5.2.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.10.0"

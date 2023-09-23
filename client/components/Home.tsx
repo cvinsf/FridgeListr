@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 // import Navbar from './Navbar.jsx';
 import MainInventory from './MainInventory.jsx';
-import Activity from './Activity.jsx';
+import Activity from './Activity.js';
 
-import ButtonAppBar from './ButtonAppBar.jsx';
+import ButtonAppBar from './ButtonAppBar.js';
 
 function Home({ user_id }) {
   // const [username, setUsername] = useState('');
