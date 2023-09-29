@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+      "allowImportingTsExtensions": true,
+      "declaration": true,
+      "emitDeclarationOnly": true,
       "target": "es6",
       "module": "commonjs",
       "outDir": "./dist",

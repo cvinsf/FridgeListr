@@ -1,28 +1,27 @@
-import * as React from 'react';
+import React, { useState, FC } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default function BasicMenu({selectFridge}) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+interface BasicMenuProps {
+  selectFridge: (fridgeName: string) => void
+}
+
+const BasicMenu: FC<BasicMenuProps> = ({ selectFridge}) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
     <div>
-      <Button
-        // id="basic-button"
-        // aria-controls={open ? 'basic-menu' : undefined}
-        // aria-haspopup="true"
-        // aria-expanded={open ? 'true' : undefined}
-        color='inherit'
-        onClick={handleClick}
-      >
+      <Button color='inherit' onClick={handleClick}>
         My Fridges
       </Button>
       <Menu
@@ -41,4 +40,6 @@ export default function BasicMenu({selectFridge}) {
       </Menu>
     </div>
   );
-}
+};
+
+export default BasicMenu;
