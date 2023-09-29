@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import FoodCard from './FoodCard.js';
-import SelectedFood from './SelectedFood.jsx';
+import React, { useState, useEffect, FC } from 'react';
+import FoodCard from './FoodCard';
+import SelectedFood from './SelectedFood';
 
-const MainInventory = (props) => {
+interface Food {
+    _id: string,
+    food_name: string,
+    quantity: number,
+    unit: string,
+    date_entered: string,
+    expiration_date: string
+  }
+  
+  interface MainInventoryProps {
+    foodArray: Food[],
+    getFoodArray: () => void,
+  }
 
-    // this is the array that will be rendered
-    const [foodRender, setFoodRender] = useState([]);
-
-    const foodFormSubmit = (action, food_id) => {
-        if (action === 'POST') {
-            postFoodItem()
-        } else {
-            patchFoodItem(food_id)
-        }
+const MainInventory: FC<MainInventoryProps> = ({ foodArray, getFoodArray }) => {
+    const [foodRender, setFoodRender] = useState<JSX.Element[]>([]);
+    const foodFormSubmit = (action: string, food_id: string) => {
+        action === 'POST' ? postFoodItem() : patchFoodItem(food_id);
     }
 
-    const [selectedFood, setSelectedFood] = useState(<SelectedFood food={props.foodArray[0]} foodFormSubmit={foodFormSubmit} key={100} />);
+    const [selectedFood, setSelectedFood] = useState<JSX.Element>(
+        <SelectedFood food={foodArray[0]} foodFormSubmit={foodFormSubmit} key={100} />
+        );
+
 
     const postFoodItem = () => {
         console.log('posted!')
@@ -39,12 +49,12 @@ const MainInventory = (props) => {
             .then((data) => {
                 // props.setFoodArray(data)
                 // console.log(data)
-                props.getFoodArray()
+                getFoodArray()
             })
             .catch((error) => console.log(error));
     }
 
-    const patchFoodItem = (food_id) => {
+    const patchFoodItem = (food_id: string) => {
         console.log('patched!', food_id)
         const postBody = {
             food_name: document.getElementById('input-food_name').value,
@@ -66,42 +76,121 @@ const MainInventory = (props) => {
             .then((data) => {
                 // props.setFoodArray(data)
                 // console.log(data)
-                props.getFoodArray()
+                getFoodArray()
             })
             .catch((error) => console.log(error));
     }
 
-    const selectFood = (i) => {
+    const selectFood = (i: number) => {
         // console.log('buttonclicked', props.foodArray[i])
-        setSelectedFood(<SelectedFood food={props.foodArray[i]} foodFormSubmit={foodFormSubmit} key={100} />)
+        setSelectedFood(<SelectedFood food={foodArray[i]} foodFormSubmit={foodFormSubmit} key={100} />)
     }
 
 
-    const delFoodItem = (food_id) => {
+    const delFoodItem = (food_id: string) => {
         const delOptions = {
             method: 'DELETE'
         }
 
         fetch(`/inventory/${food_id}`, delOptions)
             .then((data) => {
-                props.getFoodArray()
+                getFoodArray()
             })
             .catch((error) => console.log(error));
     }
 
     // this will update the render component when the food array changes
-    useEffect(() => {
-        // console.log('useeffect forprops.foodArray')
-        // console.log(props.foodArray[0])
-        const tempArr = [];
-        for (let i = 0; i < props.foodArray.length; i++) {
-            tempArr.push(<FoodCard key={i + 1000} food={props.foodArray[i]} delFoodItem={delFoodItem} i={i} selectFood={selectFood} />)
+    import React, { useState, useEffect, FC } from 'react';
+    import FoodCard from './FoodCard';
+    import SelectedFood from './SelectedFood';
+
+    interface Food {
+        _id: string,
+        food_name: string,
+        quantity: number,
+        unit: string,
+        date_entered: string,
+        expiration_date: string
+    }
+
+    interface MainInventoryProps {
+        foodArray: Food[],
+        getFoodArray: () => void,
+    }
+
+    const MainInventory: FC<MainInventoryProps> = ({ foodArray, getFoodArray }) => {
+        const [foodRender, setFoodRender] = useState<JSX.Element[]>([]);
+        const foodFormSubmit = (action: string, food_id: string) => { };
+
+        const [selectedFood, setSelectedFood] = useState<JSX.Element>(
+            <SelectedFood food={foodArray[0]} foodFormSubmit={foodFormSubmit} key={100} />
+        );
+
+        const postFoodItem = () => { };
+
+        const patchFoodItem = (food_id: string) => {
+            console.log('patched!', food_id)
+            const postBody = {
+                food_name: document.getElementById('input-food_name').value,
+                quantity: document.getElementById('input-quantity').value,
+                unit: document.getElementById('input-unit').value,
+                date_entered: document.getElementById('input-date-entered').value,
+                expiration_date: document.getElementById('input-date-expired').value
+            }
+
+            const postOptions = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postBody)
+            }
+            console.log(postOptions)
+            fetch(`/inventory/${food_id}`, postOptions)
+                .then((data) => {
+                    // props.setFoodArray(data)
+                    // console.log(data)
+                    getFoodArray()
+                })
+                .catch((error) => console.log(error));
         }
-        setFoodRender(tempArr);
-        // console.log('foodrender', tempArr[0])
-    },
-        [props.foodArray]
-    )
+
+        const selectFood = (i: number) => {
+            // console.log('buttonclicked', props.foodArray[i])
+            setSelectedFood(<SelectedFood food={foodArray[i]} foodFormSubmit={foodFormSubmit} key={100} />)
+        }
+
+        const delFoodItem = (food_id: string) => {
+            const delOptions = {
+                method: 'DELETE'
+            }
+
+            fetch(`/inventory/${food_id}`, delOptions)
+                .then((data) => {
+                    getFoodArray()
+                })
+                .catch((error) => console.log(error));
+        }
+
+        useEffect(() => {
+            const tempArr: JSX.Element[] = foodArray.map((food: Food, i: number) => (
+                <FoodCard key={i + 1000} food={food} delFoodItem={delFoodItem} i={i} selectFood={selectFood} />
+            ));
+            setFoodRender(tempArr);
+        }, [foodArray]);
+
+        return (
+            <div id='main-inventory'>
+                <div id='selected-item'>
+                    {selectedFood}
+                    <button id='clear-food' onClick={() => setSelectedFood(<SelectedFood food={undefined} foodFormSubmit={foodFormSubmit} key={100} />)}>Clear Food</button>
+                </div>
+                {foodRender}
+            </div>
+        )
+    }
+
+    export default MainInventory;
 
     return (
         <div id='main-inventory'>

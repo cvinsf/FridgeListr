@@ -10,11 +10,16 @@ interface Food {
 }
 
 interface SelectedFoodProps {
-    food: Food,
-    foodFormSubmit: (foodAction: string, _id: string) => void
-}
+    food?: Food;
+    foodFormSubmit: (food: Food) => void;
+  }
+  
 
 const SelectedFood: FC<SelectedFoodProps> = ({ food, foodFormSubmit }) => {
+    if (!food) {
+        return null;
+      }
+
     const [foodAction, setFoodAction] = useState<'POST' | 'PATCH'>('POST');
 
     const toDateInputValue = () => {

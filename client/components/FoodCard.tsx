@@ -1,20 +1,6 @@
 import React from 'react';
+import { FoodCardProps } from '../types/types';
 
-interface Food {
-    _id: string,
-    food_name: string,
-    quantity: number,
-    unit: string,
-    date_entered: string,
-    expiration_date: string
-}
-
-interface FoodCardProps {
-    food: Food,
-    i: number,
-    selectFood: (index: number) => void,
-    delFoodItem: (id: string) => void
-}
 
 const FoodCard: React.FC<FoodCardProps> = (props) => {
     const { _id, food_name, quantity, unit, date_entered, expiration_date } = props.food
