@@ -9,20 +9,6 @@ import ButtonAppBar from './components/ButtonAppBar';
 
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-interface LoginProps {
-    username: string;
-    setUsername: React.Dispatch<React.SetStateAction<string>>;
-    setUser_id: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface SignupProps {
-    username: string;
-    setUsername: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface HomeProps {
-    user_id: string;
-}
 
 const App: React.FC = () => {
     const [username, setUsername] = useState<string>("");

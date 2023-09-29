@@ -1,5 +1,5 @@
 import React from 'react';
-import { FoodCardProps } from '../types/types';
+import { FoodCardProps } from '../interfaces/interfaces';
 
 
 const FoodCard: React.FC<FoodCardProps> = (props) => {
