@@ -1,29 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import Box from '@material-ui/core/Box';
 import { Input } from '@material-ui/core';
-// import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button'
 
-function Login({username, setUsername, setUser_id}) {
+const Login = ({ username, setUsername, setUser_id }) => {
   const [password, setPassword] = useState('');
 
   let navigate = useNavigate();
 
   function loginPost() {
-
-    // console.log('loginpost')
-    // const postBody = {
-    //   username: document.getElementById("login-username").value,
-    //   password: document.getElementById("login-password").value
-    // }
     const postBody = {
       username,
       password
     }
-
-    // console.log('this is postBody', postBody);
 
     const postOptions = {
       method: 'POST',
@@ -37,8 +27,6 @@ function Login({username, setUsername, setUser_id}) {
       .then((data) => data.json())
       .then((data) => {
         console.log('this is the data', data);
-        // console.log(data)
-        // expect a cookie back and a redirect
 
         if (data) {
           setUser_id(data.user_info._id);
