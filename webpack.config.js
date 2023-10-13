@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./client/index.js",
+  entry: "./client/src/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "bundle"),
@@ -13,10 +13,17 @@ module.exports = {
   mode: process.env.NODE_ENV,
   resolve: {
     modules: [__dirname, "client", "node_modules"],
-    extensions: ["*", ".js", ".jsx"],
+    extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'ts-loader',
+        }
+      },
       {
         test: /\.jsx?/,
         exclude: /(node_modules)/,
@@ -35,21 +42,13 @@ module.exports = {
           "sass-loader",
         ],
       },
-      //   we may not need the stuff before
-      // {
-      //   test: /\.png|svg|jpg|gif$/,
-      //   use: ["file-loader"],
-      // },
     ],
   },
   plugins: [
-    // must always create a new instance
     new HtmlWebpackPlugin({
       title: 'Development',
-      // must set the template for the page to render
-      // check approach on this
-      template: './index.html',
-      filename: 'bundle.html'
+      template: './client/src/index.ts',
+      filename: './index.html'
     }),
   ],
   devServer: {

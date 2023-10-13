@@ -27,23 +27,6 @@ router.post('/login', userController.loginUser,
   }
 );
 
-// router.get('/login', 
-//   userController.loginUser,
-//   (req, res) => {
-//     // let output;
-//     res.locals.user ? output = true : output = false;
-//   }
-// );
-
-// router.get('/login/:username', userController.getUserInfo,
-//   (req, res) => {
-//     res.status(200).json(res.locals.userInfo);
-//   }
-// );
-
-// GET: account/login/:username
-// receive: req.params.username
-// return: {fridge_arrray, default_fridge}
 router.get('/login/:user_id', 
   userController.getFridgeArray,
   userController.getDefaultFridge,

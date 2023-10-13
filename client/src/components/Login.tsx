@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
-import { Input } from '@material-ui/core';
-import Button from '@material-ui/core/Button'
+import { Box, Button, TextField } from '@material-ui/core';
 
-const Login = ({ username, setUsername, setUser_id }) => {
+interface LoginProps {
+  username: string;
+  setUsername: (username: string) => void;
+  setUser_id: (user_id: number) => void;
+}
+
+const Login = ({ username, setUsername, setUser_id }: LoginProps) => {
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  let navigate = useNavigate();
-
-  function loginPost() {
+  const handleLogin = () => {
     const postBody = {
       username,
       password
@@ -24,20 +27,23 @@ const Login = ({ username, setUsername, setUser_id }) => {
     }
 
     fetch('/account/login', postOptions)
-      .then((data) => data.json())
-      .then((data) => {
-        console.log('this is the data', data);
-
-        if (data) {
-          setUser_id(data.user_info._id);
-          navigate('/home')
-        }
-        else return alert('Invalid Login');
-
-        // alert("it worked!!!")
-        // window.open("http://localhost:8080/home")
-      })
-      .catch((error) => console.log(error));
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Network response was not ok.');
+      }
+    })
+    .then(data => {
+      // handle successful login
+      setUser_id(data.user_id);
+      navigate('/dashboard');
+    })
+    .catch(error => {
+      // handle error
+      console.error('There was an error logging in:', error);
+      // display error message to user
+    });
   }
 
   return (
@@ -50,41 +56,35 @@ const Login = ({ username, setUsername, setUser_id }) => {
         }}
       >
         <center>
-          <h1>
-            Login to RFridge
-          </h1>
+          <h1>Login to RFridge</h1>
         </center>
-        <Input
-          placeholder='Username'
-          type='text'
+        <TextField
+          label='Username'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-        >
-        </Input>
-        <Input
-          placeholder='Password'
+        />
+        <TextField
+          label='Password'
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        >
-        </Input>
+        />
 
         <Button
+          variant='contained'
           type='submit'
-          onClick={loginPost}
+          onClick={handleLogin}
         >
           Login
         </Button>
 
         <Button
-          type='submit'
+          type='button'
           onClick={() => navigate('/signup')}
         >
           Sign Up
         </Button>
       </Box>
-
-      {/* <img src='https://static.wikia.nocookie.net/octonauts/images/0/00/Yeti_crab.png/revision/latest/scale-to-width-down/1000?cb=20190204201106' /> */}
     </div >
   );
 }
