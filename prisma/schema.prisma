@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model food_item {
+  id                 Int       @id @default(autoincrement()) @map("_id")
+  food_name          String    @db.VarChar(100)
+  quantity           Int?      @default(1)
+  unit               String?   @db.VarChar(20)
+  date_entered       DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  expiration_date    DateTime? @default(dbgenerated("(CURRENT_DATE + '7 days'::interval)")) @db.Date
+  fridge_unique_name String    @db.VarChar(100)
+  fridge             fridge    @relation(fields: [fridge_unique_name], references: [fridge_unique_name], onDelete: Cascade, map: "food_fk0")
+
+  @@map("food-item")
+}
+
+model fridge {
+  id                 Int            @default(autoincrement()) @map("_id")
+  fridge_unique_name String         @unique @db.VarChar(100)
+  food_item          food_item[]
+  fridge_join        fridge_join[]
+  user_account       user_account[]
+
+  @@id([id, fridge_unique_name])
+}
+
+model fridge_join {
+  id                 Int          @id @default(autoincrement()) @map("_id")
+  fridge_unique_name String       @db.VarChar(100)
+  user_id            Int
+  nickname           String?      @db.VarChar(100)
+  fridge             fridge       @relation(fields: [fridge_unique_name], references: [fridge_unique_name], onDelete: Cascade, map: "fridge_fk0")
+  user_account       user_account @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fridge_fk1")
+
+  @@map("fridge-join")
+}
+
+model sessions {
+  id             Int          @id @default(autoincrement()) @map("_id")
+  session_number String       @db.VarChar(255)
+  user_id        Int
+  time_start     DateTime     @default(dbgenerated("CURRENT_DATE")) @db.Date
+  time_expire    DateTime     @default(dbgenerated("(CURRENT_DATE + '1 day'::interval)")) @db.Date
+  user_account   user_account @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "session_fk0")
+}
+
+model user_account {
+  id                  Int           @id @default(autoincrement()) @map("_id")
+  username            String        @db.VarChar(100)
+  password            String        @db.VarChar(255)
+  email               String        @db.VarChar(100)
+  default_fridge_name String?       @db.VarChar(100)
+  fridge_join         fridge_join[]
+  sessions            sessions[]
+  fridge              fridge?       @relation(fields: [default_fridge_name], references: [fridge_unique_name], map: "user_fk0")
+
+  @@map("user-account")
+}
